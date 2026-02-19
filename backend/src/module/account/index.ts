@@ -1,0 +1,1 @@
+export { default } from "@module/account/routes/account.routes.js"
