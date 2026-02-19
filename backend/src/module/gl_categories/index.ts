@@ -1,0 +1,1 @@
+export { default } from "@module/gl_categories/routes/gl_categorie.routes.js"

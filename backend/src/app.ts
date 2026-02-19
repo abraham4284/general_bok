@@ -4,7 +4,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
-import { authRoutes,accountRoutes } from "@module/index.js";
+import { authRoutes,accountRoutes,glCategoriesRoutes } from "@module/index.js";
 
 dotenv.config();
 
@@ -50,5 +50,6 @@ app.get("/", (_, res) => res.send("Api funcionando"));
 // app.use("/api", taskRouter);
 app.use("/api", authRoutes);
 app.use("/api", accountRoutes);
+app.use("/api", glCategoriesRoutes);
 
 export default app;
