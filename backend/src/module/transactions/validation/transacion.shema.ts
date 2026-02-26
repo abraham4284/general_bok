@@ -11,7 +11,6 @@ export const createTransactionLineSchema = z.object({
   idAccount: z.number().positive(),
   idAccountTo: z.number().positive().optional(),
   idGlCategorie: z.number().positive(),
-  idUser: z.number().positive(),
   amount: z.number().positive(),
   direction: z.enum(["INCREMENT", "DECREMENT"]).optional(),
 });
