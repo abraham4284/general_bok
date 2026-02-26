@@ -4,7 +4,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
-import { authRoutes,accountRoutes,glCategoriesRoutes } from "@module/index.js";
+import { authRoutes,accountRoutes,glCategoriesRoutes,transactionsRoutes } from "@module/index.js";
 
 dotenv.config();
 
@@ -17,8 +17,6 @@ const allowList = [
 
 const corsOptions = {
   origin: function (origin: any, callback: any) {
-    console.log("CORS origin:", origin);
-    console.log("AllowList:", allowList);
     // Permite requests sin Origin (como Postman)
     if (!origin) return callback(null, true);
 
@@ -51,5 +49,6 @@ app.get("/", (_, res) => res.send("Api funcionando"));
 app.use("/api", authRoutes);
 app.use("/api", accountRoutes);
 app.use("/api", glCategoriesRoutes);
+app.use("/api", transactionsRoutes);
 
 export default app;

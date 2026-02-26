@@ -215,3 +215,114 @@ BEGIN
 END $$
 
 DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS sp_accounts_apply_by_nature;
+DELIMITER $$
+
+CREATE PROCEDURE sp_accounts_apply_by_nature(
+  IN p_id_account_from BIGINT,
+  IN p_amount DECIMAL(18,2),
+  IN p_nature VARCHAR(20),
+  IN p_id_account_to BIGINT -- solo para TRANSFER (puede ser NULL en otros)
+)
+BEGIN
+  DECLARE v_exists_from INT DEFAULT 0;
+  DECLARE v_exists_to INT DEFAULT 0;
+
+  -- Validaciones generales
+  IF p_nature IS NULL OR p_nature = '' THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'nature is required';
+  END IF;
+
+  IF p_amount IS NULL THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'amount is required';
+  END IF;
+
+  -- Para casi todos los nature, el amount debe ser > 0
+  -- ADJUSTMENT permite negativo/positivo (ajuste contable).
+  IF p_nature <> 'ADJUSTMENT' AND p_amount <= 0 THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'amount must be > 0 for this nature';
+  END IF;
+
+  -- Verificar existencia cuenta origen
+  SELECT COUNT(*) INTO v_exists_from
+  FROM accounts
+  WHERE idAccount = p_id_account_from;
+
+  IF v_exists_from = 0 THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Account FROM not found';
+  END IF;
+
+  START TRANSACTION;
+
+  CASE p_nature
+    WHEN 'INCOME' THEN
+      -- Ingreso: incrementa balance
+      UPDATE accounts
+      SET balance = balance + p_amount
+      WHERE idAccount = p_id_account_from;
+
+    WHEN 'EXPENSE' THEN
+      -- Gasto: decrementa balance
+      UPDATE accounts
+      SET balance = balance - p_amount
+      WHERE idAccount = p_id_account_from;
+
+    WHEN 'ADJUSTMENT' THEN
+      -- Ajuste: permite sumar/restar según el signo del amount
+      UPDATE accounts
+      SET balance = balance + p_amount
+      WHERE idAccount = p_id_account_from;
+
+    WHEN 'OTHER' THEN
+      -- Otros: por defecto lo trato como ajuste (lo podés cambiar)
+      UPDATE accounts
+      SET balance = balance + p_amount
+      WHERE idAccount = p_id_account_from;
+
+    WHEN 'TRANSFER' THEN
+      -- Transferencia: requiere cuenta destino y amount > 0
+      IF p_id_account_to IS NULL THEN
+        ROLLBACK;
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'id_account_to is required for TRANSFER';
+      END IF;
+
+      IF p_id_account_to = p_id_account_from THEN
+        ROLLBACK;
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'TRANSFER cannot be to the same account';
+      END IF;
+
+      SELECT COUNT(*) INTO v_exists_to
+      FROM accounts
+      WHERE idAccount = p_id_account_to;
+
+      IF v_exists_to = 0 THEN
+        ROLLBACK;
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Account TO not found';
+      END IF;
+
+      -- Debita origen
+      UPDATE accounts
+      SET balance = balance - p_amount
+      WHERE idAccount = p_id_account_from;
+
+      -- Acredita destino
+      UPDATE accounts
+      SET balance = balance + p_amount
+      WHERE idAccount = p_id_account_to;
+
+    ELSE
+      ROLLBACK;
+      SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Invalid nature. Allowed: INCOME, EXPENSE, ADJUSTMENT, TRANSFER, OTHER';
+  END CASE;
+
+  COMMIT;
+
+  -- Opcional: devolver balances actualizados
+  SELECT idAccount, balance
+  FROM accounts
+  WHERE idAccount IN (p_id_account_from, IFNULL(p_id_account_to, -1));
+
+END$$
+DELIMITER ;

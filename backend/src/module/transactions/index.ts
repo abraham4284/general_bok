@@ -1,0 +1,1 @@
+export { default } from "@module/transactions/routes/transaction.routes.js"
