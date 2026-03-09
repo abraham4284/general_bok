@@ -4,6 +4,7 @@ import type { Request, Response } from "express";
 
 export async function createAccount(req: Request, res: Response) {
   try {
+    console.log(req.body,'lo que llega')
     const dto = createAccountSchema.parse(req.body);
     const created = await createAccountService(dto);
     return res.status(201).json({
