@@ -9,6 +9,7 @@ import {
   CardFilterAccount,
 } from "../components";
 import type { Account } from "../types/account.types";
+import { useAuthStore } from "../../auth";
 
 export const AccountPage = () => {
   const {
@@ -32,6 +33,7 @@ export const AccountPage = () => {
     // toggleModalAndSetDataEdit,
   } = useUtilsState();
   const [accountFilter, setAccountFilter] = useState<Account[]>([]);
+
 
   const handleFilterInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -57,6 +59,8 @@ export const AccountPage = () => {
       resetAccounts();
     };
   }, []);
+
+
 
   const acountDef = accountFilter.length === 0 ? accounts : accountFilter;
 
@@ -109,6 +113,7 @@ export const AccountPage = () => {
         createAccount={createAccount}
         updateAccount={updateAccount}
         closeModal={closeModal}
+        addDataEdit = {addDataEdit}
       />
     </section>
   );

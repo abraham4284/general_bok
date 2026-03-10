@@ -8,6 +8,7 @@ import { updateAccountService } from "../services/account.services.update.js";
 export async function updateAccount(req: Request, res: Response) {
   try {
     const { idAccount } = idAccountParamsSchema.parse(req.params);
+    console.log(req.body,'lo que llega')
     const dto = updateAccountTaskSchema.parse(req.body);
     const updated = await updateAccountService(idAccount, dto);
     if (!updated) {

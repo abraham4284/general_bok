@@ -12,7 +12,11 @@ export const updateAccountTaskSchema = z.object({
   type: z.string().max(10),
   currency: z.string().max(3),
   balance: z.coerce.number(),
-  is_active: z.boolean(),
+  is_active: z.preprocess((value) => {
+    if (value === "1" || value === 1 || value === true) return true;
+    if (value === "0" || value === 0 || value === false) return false;
+    return value;
+  }, z.boolean()),
 });
 
 export const idAccountParamsSchema = z.object({

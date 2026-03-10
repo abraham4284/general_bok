@@ -48,6 +48,7 @@ type ModalFormAccountProps = {
     payload: any,
   ) => Promise<{ success: boolean; message: string }>;
   closeModal: () => void;
+  addDataEdit: (data: any) => void;
 };
 
 export const ModalFormAccount = ({
@@ -58,6 +59,7 @@ export const ModalFormAccount = ({
   createAccount,
   updateAccount,
   closeModal,
+  addDataEdit,
 }: ModalFormAccountProps) => {
   const {
     idAccount,
@@ -76,23 +78,23 @@ export const ModalFormAccount = ({
     if (dataEdit) {
       setFormSate({
         idAccount: dataEdit.idAccount,
-        name: dataEdit.name,
-        type: dataEdit.type,
-        currency: dataEdit.currency,
-        balance: dataEdit.balance,
-        is_active: String(dataEdit.is_active),
+        name: dataEdit.name ?? "",
+        type: dataEdit.type ?? "",
+        currency: dataEdit.currency ?? "",
+        balance: String(dataEdit.balance ?? ""),
+        is_active: String(dataEdit.is_active ?? ""),
       });
     } else {
       setFormSate(initialForm);
     }
   }, [dataEdit]);
 
-  console.log(dataEdit,'soy dataEdit')
+  const resetFormAndDataEdit = () => {
+    onResetForm();
+    addDataEdit(null);
+  };
 
-  useEffect(() => {
-    if (dataEdit) setFormSate(dataEdit);
-    else setFormSate(initialForm);
-  }, [dataEdit]);
+  const validCurrency = currencies.some((c) => c.code === currency) ? currency : "";
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -113,7 +115,7 @@ export const ModalFormAccount = ({
         type,
         currency,
         balance: balanceNumber,
-        is_active,
+        is_active: is_active === "1" ? true : false,
       };
       const { success, message } = await createAccount(payload);
 
@@ -136,6 +138,7 @@ export const ModalFormAccount = ({
       balance: balanceNumber,
       is_active,
     };
+    console.log(payloadUpdate, "payloadUpadte");
     const { success, message } = await updateAccount(idAccount, payloadUpdate);
 
     if (success) {
@@ -203,7 +206,7 @@ export const ModalFormAccount = ({
               Tipos de moneda <span className="text-red-500">*</span>
             </Label>
             <Select
-              value={currency}
+              value={validCurrency}
               onValueChange={(value) =>
                 setFormSate({ ...formSate, currency: value })
               }
@@ -216,7 +219,7 @@ export const ModalFormAccount = ({
                   currencies.map((el) => (
                     <SelectGroup key={el.code}>
                       <SelectItem value={String(el.code)}>
-                        {el.name} ({el.symbol})
+                        {el.name}
                       </SelectItem>
                     </SelectGroup>
                   ))
@@ -283,7 +286,7 @@ export const ModalFormAccount = ({
             </Button>
 
             <DialogClose asChild>
-              <Button variant="outline" onClick={onResetForm}>
+              <Button variant="outline" onClick={resetFormAndDataEdit}>
                 Cancelar
               </Button>
             </DialogClose>

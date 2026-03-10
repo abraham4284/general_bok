@@ -23,7 +23,7 @@ type TableAccountProps = {
 export const TableAccount = ({
   loading,
   data,
-  deleteAccount,
+  // deleteAccount,
   addDataEdit,
   toggleModal,
 }: TableAccountProps) => {
@@ -55,7 +55,7 @@ export const TableAccount = ({
               <TableCell className="font-medium">{el.type}</TableCell>
               <TableCell className="font-medium">{el.currency}</TableCell>
               <TableCell>{formatCurrency(el.balance)}</TableCell>
-              <TableCell className="font-medium">{el.is_active}</TableCell>
+              <TableCell className="font-medium">{el.is_active ? "Activo": "Inactivo"}</TableCell>
               <TableCell className="font-medium">{el.created_at}</TableCell>
               <TableCell>
                 <div className="flex gap-2">

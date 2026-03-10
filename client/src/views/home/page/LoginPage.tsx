@@ -36,7 +36,7 @@ export const LoginPage = () => {
       return toast.error(message);
     }
 
-    navigate("/task");
+    navigate("/admin/account");
   };
 
   return (
