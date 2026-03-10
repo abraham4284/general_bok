@@ -25,13 +25,12 @@ import { NumericFormat } from "react-number-format";
 import { Decimal } from "decimal.js";
 import { toast, Toaster } from "react-hot-toast";
 import { currencies, typesOptions } from "@/views/admin/module/account/data";
+import { natureTypes } from "../../data/nature";
 
 const initialForm = {
-  idAccount: null,
+  idGlCategorie: null,
   name: "",
-  type: "",
-  currency: "",
-  balance: "",
+  nature: "",
   is_active: "",
 };
 
@@ -40,10 +39,10 @@ type ModalFormAccountProps = {
   dataEdit: any;
   loading: boolean;
   setOpenModal: (open: boolean) => void;
-  createAccount: (
+  createCategory: (
     payload: any,
   ) => Promise<{ success: boolean; message: string }>;
-  updateAccount: (
+  updateCategory: (
     id: number,
     payload: any,
   ) => Promise<{ success: boolean; message: string }>;
@@ -51,23 +50,21 @@ type ModalFormAccountProps = {
   addDataEdit: (data: any) => void;
 };
 
-export const ModalFormAccount = ({
+export const ModalFormCategory = ({
   openModal,
   dataEdit,
   loading,
   setOpenModal,
-  createAccount,
-  updateAccount,
+  createCategory,
+  updateCategory,
   closeModal,
   addDataEdit,
 }: ModalFormAccountProps) => {
   const {
-    idAccount,
-    currency,
-    is_active,
-    type,
+    idGlCategorie,
     name,
-    balance,
+    nature,
+    is_active,
     onInputChange,
     onResetForm,
     setFormSate,
@@ -77,11 +74,9 @@ export const ModalFormAccount = ({
   useEffect(() => {
     if (dataEdit) {
       setFormSate({
-        idAccount: dataEdit.idAccount,
+        idGlCategorie: dataEdit.idGlCategorie,
         name: dataEdit.name ?? "",
-        type: dataEdit.type ?? "",
-        currency: dataEdit.currency ?? "",
-        balance: String(dataEdit.balance ?? ""),
+        nature: dataEdit.nature ?? "",
         is_active: String(dataEdit.is_active ?? ""),
       });
     } else {
@@ -94,52 +89,47 @@ export const ModalFormAccount = ({
     addDataEdit(null);
   };
 
-  const validCurrency = currencies.some((c) => c.code === currency) ? currency : "";
-
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!name || !balance) {
+    if (!name || !nature || !is_active) {
       return toast.error("Todos los campos son obligatorios");
     }
 
-    const balanceNumber = new Decimal(balance);
-
-    if (balanceNumber.isZero() || balanceNumber.isNegative()) {
-      return toast.error("Ingrese un saldo válido mayor a 0");
-    }
-
-    // Crear
-    if (idAccount === null) {
+    if (idGlCategorie === null) {
       const payload = {
         name,
-        type,
-        currency,
-        balance: balanceNumber,
-        is_active: is_active === "1" ? true : false,
+        nature,
+        is_active: is_active === "1" ? 1 : 0,
       };
-      const { success, message } = await createAccount(payload);
+      const { success, message } = await createCategory(payload);
 
       if (success) {
         closeModal();
         onResetForm();
         toast.success(message);
       } else {
-        toast.error(message || "Error al crear la cuenta.");
+        toast.error(message || "Error al crear la categoría.");
       }
       return;
-    }
+    } else {
+      // Editar
 
-    // Editar
-    const payloadUpdate = {
-      ...formSate,
-      name,
-      type,
-      currency,
-      balance: balanceNumber,
-      is_active,
-    };
-    console.log(payloadUpdate, "payloadUpadte");
-    
+      const payload = {
+        ...formSate,
+        name,
+        nature,
+        is_active: is_active === "1" ? 1 : 0,
+      };
+      const { success, message } = await updateCategory(idGlCategorie, payload);
+
+      if (success) {
+        closeModal();
+        onResetForm();
+        toast.success(message);
+      } else {
+        toast.error(message || "Error al editar la categoria.");
+      }
+    }
   };
 
   return (
@@ -147,14 +137,14 @@ export const ModalFormAccount = ({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            {dataEdit ? "Editar cuenta" : "Nueva Cuenta"}
+            {dataEdit ? "Editar categoría" : "Nueva Categoría"}
           </DialogTitle>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4 mt-2">
           {/* Nombre */}
           <div>
-            <Label>Nombre de la cuenta</Label>
+            <Label>Nombre de la categoría</Label>
             <Input
               name="name"
               value={name}
@@ -166,20 +156,20 @@ export const ModalFormAccount = ({
 
           <div>
             <Label htmlFor="balance">
-              Tipos <span className="text-red-500">*</span>
+              Naturaleza <span className="text-red-500">*</span>
             </Label>
             <Select
-              value={type}
+              value={nature}
               onValueChange={(value) =>
-                setFormSate({ ...formSate, type: value })
+                setFormSate({ ...formSate, nature: value })
               }
             >
               <SelectTrigger className="w-full mt-2">
                 <SelectValue placeholder="Seleccione una opción" />
               </SelectTrigger>
               <SelectContent>
-                {typesOptions.length > 0 ? (
-                  typesOptions.map((el) => (
+                {natureTypes.length > 0 ? (
+                  natureTypes.map((el) => (
                     <SelectGroup key={el.id}>
                       <SelectItem value={String(el.name)}>{el.name}</SelectItem>
                     </SelectGroup>
@@ -193,60 +183,8 @@ export const ModalFormAccount = ({
             </Select>
           </div>
 
-          <div>
-            <Label htmlFor="balance">
-              Tipos de moneda <span className="text-red-500">*</span>
-            </Label>
-            <Select
-              value={validCurrency}
-              onValueChange={(value) =>
-                setFormSate({ ...formSate, currency: value })
-              }
-            >
-              <SelectTrigger className="w-full mt-2">
-                <SelectValue placeholder="Seleccione una opción" />
-              </SelectTrigger>
-              <SelectContent>
-                {currencies.length > 0 ? (
-                  currencies.map((el) => (
-                    <SelectGroup key={el.code}>
-                      <SelectItem value={String(el.code)}>
-                        {el.name}
-                      </SelectItem>
-                    </SelectGroup>
-                  ))
-                ) : (
-                  <SelectGroup>
-                    <SelectLabel>Sin datos</SelectLabel>
-                  </SelectGroup>
-                )}
-              </SelectContent>
-            </Select>
-          </div>
-
           {/* Saldo con NumericFormat */}
-          <div>
-            <Label>Saldo inicial</Label>
-            <NumericFormat
-              value={balance}
-              inputMode="decimal"
-              thousandSeparator="."
-              decimalSeparator=","
-              allowedDecimalSeparators={[","]}
-              decimalScale={2}
-              allowNegative={false}
-              allowLeadingZeros={false}
-              onValueChange={(values) => {
-                setFormSate({
-                  ...formSate,
-                  balance: values.value, // ← GUARDAR SIEMPRE ESTE
-                });
-              }}
-              className="mt-2 border rounded-md p-2 w-full"
-              disabled={loading}
-              placeholder="Ej: 1.372.342,28"
-            />
-          </div>
+
           <div className="space-y-2">
             <Label htmlFor="priority">Activo</Label>
             <Select
