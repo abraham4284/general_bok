@@ -1,3 +1,14 @@
+
+export type GlTransaction= {
+  ocurred_at: string;
+  description: string;
+  status: string;
+  source: string;
+  external_ref: string;
+  created_at: string;
+};
+
+
 export type TransactionDTO = {
   ocurred_at: string;
   description: string;

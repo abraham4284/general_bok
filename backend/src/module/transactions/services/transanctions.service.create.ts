@@ -81,7 +81,7 @@ export async function createTransactionService(
     await conn.commit();
     conn.release();
     return {
-      status: "success",
+      status: "OK",
       success: true,
       message: "Transaction created successfully",
       data: created,

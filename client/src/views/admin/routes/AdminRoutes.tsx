@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom";
-import { AccountRoutes,CategoryRoutes } from "@/views/admin/module";
+import { AccountRoutes,CategoryRoutes,TransactionRoutes } from "@/views/admin/module";
 import { SideBar } from "@/components";
 import { useState } from "react";
 
@@ -45,6 +45,7 @@ export const AdminRoutes = () => {
         <Routes>
           <Route path="/account/*" element={<AccountRoutes />} />
           <Route path="/category-transaction/*" element={<CategoryRoutes />} />
+          <Route path="/transaction/*" element={<TransactionRoutes />} />
         </Routes>
       </main>
     </div>

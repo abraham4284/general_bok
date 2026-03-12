@@ -77,6 +77,20 @@ BEGIN
   ORDER BY occurred_at DESC, idGlTransaction DESC;
 END $$
 
+DROP PROCEDURE IF EXISTS sp_gl_transactions_getAll $$
+CREATE PROCEDURE sp_gl_transactions_getAll( )
+BEGIN
+  SELECT
+    idGlTransaction,
+    occurred_at,
+    description,
+    status,
+    source,
+    external_ref,
+    created_at
+  FROM gl_transactions;
+END $$
+
 
 -- ---------- VOID ----------
 DROP PROCEDURE IF EXISTS sp_gl_transactions_void $$

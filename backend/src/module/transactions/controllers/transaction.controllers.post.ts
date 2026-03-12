@@ -7,6 +7,7 @@ import { createTransactionService } from "../services/transanctions.service.crea
 
 export async function createTransaction(req: Request, res: Response) {
   try {
+    console.log(req.body,'lo que llega')
     const dtoTransaction = createTransactionSchema.parse(req.body);
     const dtoTransactionLine = createTransactionLineSchema.parse(req.body);
     const user = req.user;
@@ -16,7 +17,7 @@ export async function createTransaction(req: Request, res: Response) {
         message: "No autenticado",
       });
     }
-    const { idAccount, idAccountTo, idGlCategorie, amount, direction } =
+    const { idAccount, idAccountTo, idGlCategorie, amount, direction, } =
       dtoTransactionLine;
     const { status, message, data } = await createTransactionService(
       dtoTransaction,
@@ -26,7 +27,7 @@ export async function createTransaction(req: Request, res: Response) {
         idGlCategorie,
         idUser: user.idUser,
         amount,
-        direction,
+        direction
       },
     );
     if (!status || !message) {
@@ -35,6 +36,7 @@ export async function createTransaction(req: Request, res: Response) {
         message: "Error al crear la transacción",
       };
     }
+
     return res.status(201).json({
       status,
       message,
