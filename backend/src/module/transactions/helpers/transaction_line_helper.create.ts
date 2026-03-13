@@ -32,6 +32,11 @@ export async function createTransactionLineHelper(
     if (!glCategorie?.[0]?.[0]) throw new Error("GlCategorie not found");
     const { nature } = glCategorie[0][0];
 
+    const signedAmount =
+      dto.direction === "DECREMENT" || nature === "EXPENSE"
+        ? amountDecimal.negated().toString()
+        : amountDecimal.toString();
+
     if (nature === "TRANSFER") {
       const [resultTransferAccountFrom] = await conn.query(
         "CALL sp_gl_transaction_lines_create(?,?,?,?,?)",
@@ -39,7 +44,7 @@ export async function createTransactionLineHelper(
           dto.idGlTransaction,
           dto.idAccount,
           dto.idGlCategorie,
-          dto.amount,
+          amountDecimal.negated().toString(),
           dto.note,
         ],
       );
@@ -57,7 +62,7 @@ export async function createTransactionLineHelper(
           dto.idGlTransaction,
           dto.idAccountTo,
           dto.idGlCategorie,
-          dto.amount,
+          amountDecimal.toString(),
           dto.note,
         ],
       );
@@ -65,7 +70,8 @@ export async function createTransactionLineHelper(
         return {
           status: "error",
           success: false,
-          message: "Error al crear la línea de transacción para la cuenta destino",
+          message:
+            "Error al crear la línea de transacción para la cuenta destino",
         };
       }
       const { status, message } = await updateBalanceHelper(
@@ -97,7 +103,7 @@ export async function createTransactionLineHelper(
           dto.idGlTransaction,
           dto.idAccount,
           dto.idGlCategorie,
-          dto.amount,
+          signedAmount,
           dto.note,
         ],
       );

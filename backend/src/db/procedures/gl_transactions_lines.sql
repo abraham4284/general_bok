@@ -1,6 +1,4 @@
 DELIMITER $$
-
--- ---------- CREATE ----------
 DROP PROCEDURE IF EXISTS sp_gl_transaction_lines_create $$
 CREATE PROCEDURE sp_gl_transaction_lines_create(
   IN  p_idGlTransaction INT,
@@ -14,7 +12,7 @@ BEGIN
   DECLARE v_acc_exists INT DEFAULT 0;
   DECLARE v_cat_exists INT DEFAULT 0;
 
-  IF p_amount IS NULL OR p_amount = 0 THEN
+  IF p_amount IS NULL THEN
     SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Amount must be non-zero';
   END IF;
 
@@ -55,16 +53,11 @@ CREATE PROCEDURE sp_gl_transaction_lines_get_by_id(
   IN p_idGlTransactionLine INT
 )
 BEGIN
-  SELECT
-    idGlTransactionLine,
-    idGlTransaction,
-    idAccount,
-    idGlCategorie,
-    amount,
-    note,
-    created_at
-  FROM gl_transaction_lines
-  WHERE idGlTransactionLine = p_idGlTransactionLine;
+ SELECT gtl.idGlTransactionLine, ac.name AS account_name , glc.name AS category_name , glc.nature, gtl.amount, gtl.created_at
+FROM gl_transaction_lines gtl
+JOIN accounts ac ON ac.idAccount = gtl.idAccount
+JOIN gl_categories glc ON glc.idGlCategorie = gtl.idGlCategorie
+WHERE gtl.idGltransaction = p_idGlTransactionLine;
 END $$
 
 -- ---------- LIST BY TRANSACTION ----------

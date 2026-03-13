@@ -3,10 +3,12 @@ import axios, { AxiosError } from "axios";
 import {
   createTransactionRequest,
   getTransactionsRequest,
+  getTransactionsLineRequest,
 } from "../api/transactions.api";
 import type {
   GlTransactions,
   GlTransactionsCreate,
+  GlTransactionsLine,
 } from "../types/transactions.types";
 
 type ActionResult<T = undefined> = {
@@ -40,8 +42,16 @@ function getAxiosMessage(err: unknown): string {
 
 export const useGltransactions = () => {
   const [transactions, setTransactions] = useState<GlTransactions[]>([]);
+  const [transactionsLineById, setTransactionsLineById] = useState<
+    GlTransactionsLine[]
+  >([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [loadingTransactionsLineById, setLoadingTransactionsLineById] =
+    useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [errorTransactionsLineById, setErrorTransactionsLineById] = useState<
+    string | null
+  >(null);
 
   const getTransactions = useCallback(async (): Promise<
     ActionResult<GlTransactions[]>
@@ -67,6 +77,33 @@ export const useGltransactions = () => {
     }
   }, []);
 
+  const getTransactionsLineById = useCallback(
+    async (id: number): Promise<ActionResult<GlTransactionsLine[]>> => {
+      try {
+        setLoadingTransactionsLineById(true);
+        const { data } = await getTransactionsLineRequest(id);
+
+        if (data.status === "OK") {
+          setTransactionsLineById(data.data);
+          setErrorTransactionsLineById(null);
+          return { success: true, message: data.message, data: data.data };
+        }
+
+        setErrorTransactionsLineById(
+          data.message || "Ocurrió un error inesperado",
+        );
+        return { success: false, message: data.message || "Error" };
+      } catch (err) {
+        const message = getAxiosMessage(err);
+        setErrorTransactionsLineById(message);
+        return { success: false, message };
+      } finally {
+        setLoadingTransactionsLineById(false);
+      }
+    },
+    [],
+  );
+
   const createGlTransaction = useCallback(
     async (
       payload: GlTransactionsCreate,
@@ -74,7 +111,7 @@ export const useGltransactions = () => {
       try {
         setLoading(true);
         const { data } = await createTransactionRequest(payload); // ApiResponse<GlTransactions>
-        console.log(data,'la que llega')
+        console.log(data, "la que llega");
 
         if (data.status === "OK") {
           // si el backend devuelve la cuenta creada
@@ -102,12 +139,23 @@ export const useGltransactions = () => {
     setError(null);
   }, []);
 
+  const resetGlTransactionsLineById = useCallback(() => {
+    setTransactionsLineById([]);
+    setLoadingTransactionsLineById(true);
+    setErrorTransactionsLineById(null);
+  }, []);
+
   return {
     transactions,
+    transactionsLineById,
     loading,
+    loadingTransactionsLineById,
     error,
+    errorTransactionsLineById,
     getTransactions,
+    getTransactionsLineById,
     createGlTransaction,
     resetGlTransactions,
+    resetGlTransactionsLineById,
   };
 };

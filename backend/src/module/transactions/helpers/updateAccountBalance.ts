@@ -28,12 +28,13 @@ export async function updateBalanceHelper(
     if (!accountById?.[0]?.[0]) throw new Error("Account not found");
     const currentBalance = new Decimal(accountById[0][0].balance);
     const amountDirection =
-      dto.direction === "INCREMENT" ? amountDecimal : amountDecimal.toString();
-
+      dto.direction === "DECREMENT"
+        ? amountDecimal.negated().toString()
+        : amountDecimal.toString();
     if (
       dto.nature === "EXPENSE" ||
       dto.nature === "TRANSFER" ||
-      dto.nature === "ADJUSTMENT"
+      (dto.nature === "ADJUSTMENT" && dto.direction === "DECREMENT")
     ) {
       if (amountDecimal.gt(currentBalance)) {
         return {

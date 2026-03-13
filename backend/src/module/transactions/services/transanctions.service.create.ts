@@ -25,7 +25,7 @@ export async function createTransactionService(
     await conn.query("SET @idGltransaction = 0");
     const [result] = await conn.query<ResultSetHeader>(
       "CALL sp_gl_transactions_create(?,?,?,?,?,@idGlTransaction)",
-      [dto.ocurred_at, dto.description, "POSTED", "MANUAL", dto.external_ref],
+      [dto.ocurred_at, dto.description, "OK", "MANUAL", dto.external_ref],
     );
     if (result.affectedRows === 0) {
       await conn.rollback();

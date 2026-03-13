@@ -1,7 +1,7 @@
 export type Category = {
   idGlCategorie: number;
   name: string;
-  nature: "INCOME" | "EXPENSE" | "ADJUSTEMENT" | "TRANSFER" | "OTHER";
+  nature: "INCOME" | "EXPENSE" | "ADJUSTMENT" | "TRANSFER" | "OTHER";
   is_active: boolean;
   create_at: string;
 };
@@ -9,7 +9,7 @@ export type Category = {
 export type CategoryCreateDTO = {
   idGlCategorie: number;
   name: string;
-  nature: "INCOME" | "EXPENSE" | "ADJUSTEMENT" | "TRANSFER" | "OTHER";
+  nature: "INCOME" | "EXPENSE" | "ADJUSTMENT" | "TRANSFER" | "OTHER";
   is_active: boolean;
 };
 

@@ -7,22 +7,25 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { BadgeCheck, CircleSlash,FolderKanban } from "lucide-react";
+import {  CircleSlash } from "lucide-react";
 import { Spinner } from "@/components/ui/spinner";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Link } from "react-router-dom";
+// import { Badge } from "@/components/ui/badge";
+// import { Link } from "react-router-dom";
+import { formatCurrency } from "@/helpers";
 // import { formatCurrency } from "@/helpers";
+import type { GlTransactionsLine } from "../../types/transactions.types";
+import { GetNatureIcon } from "../../helpers/getNatureIcon"
 
 type TableAccountProps = {
   loading: boolean;
-  data: any[];
+  data: GlTransactionsLine[];
   deleteAccount?: (id: number) => Promise<void>;
-  addDataEdit: (data: any) => void;
-  toggleModal: () => void;
+  addDataEdit?: (data: any) => void;
+  toggleModal?: () => void;
 };
 
-export const TableTransactions = ({
+export const TableTransactionsLine = ({
   loading,
   data,
   // deleteAccount,
@@ -32,15 +35,14 @@ export const TableTransactions = ({
   console.log(data, "lo que llega");
   return (
     <Table>
-      <TableCaption>Lista de transacciones</TableCaption>
+      <TableCaption>Lista de transacciones en linea</TableCaption>
       <TableHeader>
         <TableRow>
-          <TableHead className="">Fecha</TableHead>
-          <TableHead>Descripcion</TableHead>
-          <TableHead>Fuente</TableHead>
-          <TableHead>Referencia externa</TableHead>
-          <TableHead>Estado</TableHead>
-          <TableHead>Creada</TableHead>
+          <TableHead className="">Creado</TableHead>
+          <TableHead>Cuenta</TableHead>
+          <TableHead>Categoria</TableHead>
+          <TableHead>Naturaleza</TableHead>
+          <TableHead>Monto</TableHead>
           <TableHead>Acciones</TableHead>
         </TableRow>
       </TableHeader>
@@ -53,38 +55,24 @@ export const TableTransactions = ({
           </TableRow>
         ) : data.length > 0 ? (
           data.map((el) => (
-            <TableRow key={el.idGlTransaction}>
-              <TableCell className="font-medium">{el.occurred_at}</TableCell>
-              <TableCell className="font-medium">{el.description}</TableCell>
-
-              <TableCell className="font-medium">{el.source}</TableCell>
+            <TableRow key={el.idGlTransactionLine}>
+              <TableCell className="font-medium">{el.created_at}</TableCell>
+              <TableCell className="font-medium">{el.account_name}</TableCell>
+              <TableCell className="font-medium">{el.category_name}</TableCell>
+              <TableCell className="font-medium"><GetNatureIcon nature={el.nature}/> </TableCell>
               <TableCell className="font-medium">
-                {el.external_ref ? el.external_ref: "-"}
+                {formatCurrency(el.amount)}
               </TableCell>
-              <TableCell className="font-medium">
-                {el.status === "OK" && (
-                  <Badge variant="secondary" className="bg-green-400">
-                    <BadgeCheck data-icon="inline-start" />
-                    Completado
-                  </Badge>
-                )}
 
-                {el.status === "ANULADO" && (
-                  <Badge variant="destructive" className="bg-red-400">
-                    <BadgeCheck data-icon="inline-start" />
-                    Anulado
-                  </Badge>
-                )}
-              </TableCell>
               <TableCell className="font-medium">{el.created_at}</TableCell>
               <TableCell>
                 <div className="flex gap-2">
-                  <Link
+                  {/* <Link
                     className="bg-blue-500 cursor-pointer px-1.5 py-1.5 rounded-lg"
                     to={`/admin/transaction/${el.idGlTransaction}`}
                   >
                     <FolderKanban color="white" strokeWidth={2.5} />
-                  </Link>
+                  </Link> */}
 
                   <Button
                     className="bg-red-600 cursor-pointer"

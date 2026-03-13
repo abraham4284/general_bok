@@ -1,2 +1,4 @@
 export * from './table/TableTransactions'
+export * from './table/TableTransactionsLine'
 export * from './modal/ModalFormTransaction'
+export * from './card/CardResumeTransaction'

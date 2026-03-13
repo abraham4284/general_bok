@@ -5,7 +5,7 @@ DROP PROCEDURE IF EXISTS sp_gl_transactions_create $$
 CREATE PROCEDURE sp_gl_transactions_create(
   IN  p_occurred_at VARCHAR(45),
   IN  p_description VARCHAR(255),
-  IN  p_status      ENUM('POSTED','VOID'),
+  IN  p_status      ENUM('POSTED','VOID',"OK","ANULADO"),
   IN  p_source      ENUM('MANUAL','SYSTEM','IMPORT'),
   IN  p_external_ref VARCHAR(120),
   OUT p_idGlTransaction INT

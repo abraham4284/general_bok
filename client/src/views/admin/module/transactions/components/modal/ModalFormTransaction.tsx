@@ -51,6 +51,7 @@ const initialForm = {
   idAccountTo: "",
   idGlCategorie: "",
   amount: "",
+  direction: "",
 };
 
 export const ModalFormTransaction = ({
@@ -59,7 +60,7 @@ export const ModalFormTransaction = ({
   setOpenModal,
   createTransaction,
   closeModal,
-  addDataEdit,
+  // addDataEdit,
   accounts,
   category,
 }: ModalFormTransactionProps) => {
@@ -70,6 +71,7 @@ export const ModalFormTransaction = ({
     idAccount,
     idAccountTo,
     idGlCategorie,
+    direction,
     amount,
     onInputChange,
     onResetForm,
@@ -84,6 +86,7 @@ export const ModalFormTransaction = ({
 
   const natureCategorySelected = selectedCategory?.nature ?? "";
   const isTransfer = natureCategorySelected === "TRANSFER";
+  const isAdjustment = natureCategorySelected === "ADJUSTMENT";
   const hasCategorySelected = !!selectedCategory;
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -93,7 +96,7 @@ export const ModalFormTransaction = ({
     }
 
     let payload;
-    if (natureCategorySelected === "TRANSFER") {
+    if (isTransfer) {
       payload = {
         ocurred_at,
         description,
@@ -102,6 +105,16 @@ export const ModalFormTransaction = ({
         idAccountTo,
         idGlCategorie,
         amount,
+      };
+    } else if (isAdjustment) {
+      payload = {
+        ocurred_at,
+        description,
+        external_ref,
+        idAccount,
+        idGlCategorie,
+        amount,
+        direction,
       };
     } else {
       payload = {
@@ -219,7 +232,7 @@ export const ModalFormTransaction = ({
             </Select>
           </div>
 
-          {hasCategorySelected && !isTransfer && (
+          {hasCategorySelected && !isTransfer && !isAdjustment && (
             <div>
               <Label htmlFor="balance">
                 Cuenta <span className="text-red-500">*</span>
@@ -250,6 +263,64 @@ export const ModalFormTransaction = ({
                 </SelectContent>
               </Select>
             </div>
+          )}
+
+          {hasCategorySelected && isAdjustment && (
+            <>
+            <div>
+              <Label htmlFor="balance">
+                Cuenta <span className="text-red-500">*</span>
+              </Label>
+              <Select
+                value={idAccount}
+                onValueChange={(value) =>
+                  setFormSate({ ...formSate, idAccount: value })
+                }
+              >
+                <SelectTrigger className="w-full mt-2">
+                  <SelectValue placeholder="Seleccione una opción" />
+                </SelectTrigger>
+                <SelectContent>
+                  {accounts.length > 0 ? (
+                    accounts.map((el) => (
+                      <SelectGroup key={el.idAccount}>
+                        <SelectItem value={String(el.idAccount)}>
+                          {el.name} - {formatCurrency(el.balance)}
+                        </SelectItem>
+                      </SelectGroup>
+                    ))
+                  ) : (
+                    <SelectGroup>
+                      <SelectLabel>Sin datos</SelectLabel>
+                    </SelectGroup>
+                  )}
+                </SelectContent>
+              </Select>
+            </div>
+             <div>
+              <Label htmlFor="balance">
+                Direccion <span className="text-red-500">*</span>
+              </Label>
+              <Select
+                value={direction}
+                onValueChange={(value) =>
+                  setFormSate({ ...formSate, direction: value })
+                }
+              >
+                <SelectTrigger className="w-full mt-2">
+                  <SelectValue placeholder="Seleccione una opción" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Seleccione una opcion</SelectLabel>
+                    <SelectItem value="INCREMENT">Incremento</SelectItem>
+                    <SelectItem value="DECREMENT">Decremento</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+            </>
+           
           )}
 
           {hasCategorySelected && isTransfer && (

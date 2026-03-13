@@ -18,7 +18,7 @@ export type TransactionDTO = {
 export type TransactionUpdate = {
   ocurred_at: string;
   description: string;
-  status: "POSTED" | "VOID" | string;
+  status: "POSTED" | "VOID" | "OK" | "ANULADO";
   source: "MANUAL" | "SYSTEM" | "IMPORT" | string;
   external_ref: string;
   created_at?: string;
