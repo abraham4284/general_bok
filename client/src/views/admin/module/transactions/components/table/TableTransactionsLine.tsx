@@ -38,7 +38,7 @@ export const TableTransactionsLine = ({
       <TableCaption>Lista de transacciones en linea</TableCaption>
       <TableHeader>
         <TableRow>
-          <TableHead className="">Creado</TableHead>
+          {/* <TableHead className="">Creado</TableHead> */}
           <TableHead>Cuenta</TableHead>
           <TableHead>Categoria</TableHead>
           <TableHead>Naturaleza</TableHead>
@@ -56,7 +56,7 @@ export const TableTransactionsLine = ({
         ) : data.length > 0 ? (
           data.map((el) => (
             <TableRow key={el.idGlTransactionLine}>
-              <TableCell className="font-medium">{el.created_at}</TableCell>
+              {/* <TableCell className="font-medium">{el.created_at}</TableCell> */}
               <TableCell className="font-medium">{el.account_name}</TableCell>
               <TableCell className="font-medium">{el.category_name}</TableCell>
               <TableCell className="font-medium"><GetNatureIcon nature={el.nature}/> </TableCell>
@@ -64,7 +64,7 @@ export const TableTransactionsLine = ({
                 {formatCurrency(el.amount)}
               </TableCell>
 
-              <TableCell className="font-medium">{el.created_at}</TableCell>
+              {/* <TableCell className="font-medium">{el.created_at}</TableCell> */}
               <TableCell>
                 <div className="flex gap-2">
                   {/* <Link

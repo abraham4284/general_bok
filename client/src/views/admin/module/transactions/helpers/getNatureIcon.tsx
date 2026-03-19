@@ -1,5 +1,5 @@
 import { TrendingUp, TrendingDown, Package, FolderSync } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+// import { Badge } from "@/components/ui/badge";
 
 type NatureProps = {
   nature: "INCOME" | "EXPENSE" | "ADJUSTMENT" | "TRANSFER" | "OTHER" | string;

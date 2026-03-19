@@ -6,5 +6,6 @@ import type { GlTransactions, GlTransactionsCreate,GlTransactionsLine } from "..
 
 
 export const getTransactionsRequest = async (): Promise<AxiosResponse<ApiResponse<GlTransactions[]>>> => axios.get("/transaction");
+export const getIdTransactionsRequest = async (id: number): Promise<AxiosResponse<ApiResponse<GlTransactions[]>>> => axios.get(`/transaction/${id}`);
 export const createTransactionRequest = async (data: GlTransactionsCreate): Promise<AxiosResponse<ApiResponse<GlTransactions>>> => axios.post("/transaction",data);
 export const getTransactionsLineRequest = async (id: number): Promise<AxiosResponse<ApiResponse<GlTransactionsLine[]>>> => axios.get(`/transactionLine/${id}`)

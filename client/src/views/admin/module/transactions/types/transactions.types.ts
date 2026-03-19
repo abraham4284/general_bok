@@ -5,7 +5,7 @@ export type GlTransactions = {
   status: "POSTED" | "VOID";
   source: "MANUAL" | "SYSTEM" | "IMPORT";
   external_ref: string;
-  create_at: string;
+  created_at: string;
 };
 
 export type GlTransactionsCreate = {

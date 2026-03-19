@@ -10,19 +10,28 @@ export const TransactionLineByIdPage = () => {
     transactionsLineById,
     getTransactionsLineById,
     loadingTransactionsLineById,
-    errorTransactionsLineById,
+    // errorTransactionsLineById,
+    getTransactionsById,
+    transactionsById,
+    setLoadingTransactionsById,
     resetGlTransactionsLineById,
+    resetGlTransactionsById
   } = useGltransactions();
 
 
   useEffect(() => {
     if (id) {
       getTransactionsLineById(parseInt(id));
+      getTransactionsById(parseInt(id))
       return () => {
         resetGlTransactionsLineById();
+        resetGlTransactionsById()
       };
     }
   }, [id]);
+
+
+
 
   return (
     <section>
@@ -34,10 +43,10 @@ export const TransactionLineByIdPage = () => {
           <h2 className="text-lg font-semibold">Transaccion n</h2>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-2 md:gap-2">
+        <div className="grid grid-cols-1 lg:grid-cols-6 gap-2 md:gap-3">
           <CardResumeTransaction
             loadingById={false}
-            // purchasesById={purchasesById}
+            transactionById={transactionsById}
           />
         </div>
       </div>
