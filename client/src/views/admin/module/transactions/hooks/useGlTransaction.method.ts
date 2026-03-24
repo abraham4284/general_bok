@@ -5,12 +5,14 @@ import {
   getTransactionsRequest,
   getTransactionsLineRequest,
   getIdTransactionsRequest,
+  cancelTransactionRequest,
 } from "../api/transactions.api";
 import type {
   GlTransactions,
   GlTransactionsCreate,
   GlTransactionsLine,
 } from "../types/transactions.types";
+import Swal from "sweetalert2";
 
 type ActionResult<T = undefined> = {
   success: boolean;
@@ -43,19 +45,22 @@ function getAxiosMessage(err: unknown): string {
 
 export const useGltransactions = () => {
   const [transactions, setTransactions] = useState<GlTransactions[]>([]);
-  const [transactionsById, setTransactionsById] = useState<GlTransactions[]>([]);
+  const [transactionsById, setTransactionsById] = useState<GlTransactions[]>(
+    [],
+  );
   const [transactionsLineById, setTransactionsLineById] = useState<
     GlTransactionsLine[]
   >([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [loadingTransactionsLineById, setLoadingTransactionsLineById] =
     useState<boolean>(true);
-  const [loadingTransactionsById, setLoadingTransactionsById] = useState<boolean>(true);
+  const [loadingTransactionsById, setLoadingTransactionsById] =
+    useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [errorTransactionsLineById, setErrorTransactionsLineById] = useState<
     string | null
   >(null);
-   const [errorTransactionsById, setErrorTransactionsById] = useState<
+  const [errorTransactionsById, setErrorTransactionsById] = useState<
     string | null
   >(null);
 
@@ -110,7 +115,6 @@ export const useGltransactions = () => {
     [],
   );
 
-
   const getTransactionsById = useCallback(
     async (id: number): Promise<ActionResult<GlTransactions[]>> => {
       try {
@@ -123,9 +127,7 @@ export const useGltransactions = () => {
           return { success: true, message: data.message, data: data.data };
         }
 
-        setErrorTransactionsById(
-          data.message || "Ocurrió un error inesperado",
-        );
+        setErrorTransactionsById(data.message || "Ocurrió un error inesperado");
         return { success: false, message: data.message || "Error" };
       } catch (err) {
         const message = getAxiosMessage(err);
@@ -138,6 +140,95 @@ export const useGltransactions = () => {
     [],
   );
 
+  const cancelTransaction = useCallback(
+    async (id: number): Promise<ActionResult<GlTransactions[]>> => {
+      try {
+        const result = await Swal.fire({
+          title: "¿Estás seguro de anular esta transacción?",
+          text: "No podrás revertir esto.",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Sí",
+          cancelButtonText: "Cancelar",
+        });
+
+        if (!result.isConfirmed) {
+          return {
+            success: false,
+            message: "Operación cancelada por el usuario",
+          };
+        }
+
+        setLoading(true);
+
+        const { data } = await cancelTransactionRequest(id);
+        if (data.status === "OK") {
+          console.log(data, "soy data");
+          const updateTransaction = data.data[0];
+          setTransactions((prev) =>
+            prev.map((el) =>
+              el.idGlTransaction === id ? updateTransaction : el,
+            ),
+          );
+          setError(null);
+
+          return {
+            success: true,
+            message: data.message,
+            data: data.data,
+          };
+        }
+
+        const errorMessage = data.message || "Ocurrió un error inesperado";
+        setError(errorMessage);
+
+        return {
+          success: false,
+          message: errorMessage,
+        };
+      } catch (err) {
+        const message = getAxiosMessage(err);
+        setError(message);
+
+        return {
+          success: false,
+          message,
+        };
+      } finally {
+        setLoading(false);
+      }
+    },
+    [],
+  );
+  // const cancelTransaction = useCallback(
+  //   async (id: number): Promise<ActionResult<GlTransactions[]>> => {
+  //     try {
+  //       setLoading(true);
+  //       const { data } = await cancelTransactionRequest(id);
+
+  //       if (data.status === "OK") {
+  //         setTransactions(data.data);
+  //         setError(null);
+  //         return { success: true, message: data.message, data: data.data };
+  //       }
+
+  //       setError(
+  //         data.message || "Ocurrió un error inesperado",
+  //       );
+  //       return { success: false, message: data.message || "Error" };
+  //     } catch (err) {
+  //       const message = getAxiosMessage(err);
+  //       setError(message);
+  //       return { success: false, message };
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   },
+  //   [],
+  // );
+
   const createGlTransaction = useCallback(
     async (
       payload: GlTransactionsCreate,
@@ -145,8 +236,6 @@ export const useGltransactions = () => {
       try {
         setLoading(true);
         const { data } = await createTransactionRequest(payload); // ApiResponse<GlTransactions>
-        console.log(data, "la que llega");
-
         if (data.status === "OK") {
           // si el backend devuelve la cuenta creada
           setTransactions((prev) => [...prev, data.data]);
@@ -179,11 +268,11 @@ export const useGltransactions = () => {
     setErrorTransactionsLineById(null);
   }, []);
 
-const resetGlTransactionsById = useCallback(() => {
+  const resetGlTransactionsById = useCallback(() => {
     setTransactionsById([]);
     setLoadingTransactionsById(true);
     setErrorTransactionsById(null);
-  }, [])
+  }, []);
 
   return {
     transactions,
@@ -199,8 +288,9 @@ const resetGlTransactionsById = useCallback(() => {
     getTransactionsLineById,
     getTransactionsById,
     createGlTransaction,
+    cancelTransaction,
     resetGlTransactions,
     resetGlTransactionsLineById,
-    resetGlTransactionsById
+    resetGlTransactionsById,
   };
 };

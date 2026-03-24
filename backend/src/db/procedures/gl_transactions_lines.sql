@@ -3,6 +3,7 @@ DROP PROCEDURE IF EXISTS sp_gl_transaction_lines_create $$
 CREATE PROCEDURE sp_gl_transaction_lines_create(
   IN  p_idGlTransaction INT,
   IN  p_idAccount       INT,
+  IN  p_idAccountTo       INT,
   IN  p_idGlCategorie   INT,
   IN  p_amount          DECIMAL(18,2),
   IN  p_note            VARCHAR(255)
@@ -41,19 +42,19 @@ BEGIN
   END IF;
 
   INSERT INTO gl_transaction_lines
-    (idGlTransaction, idAccount, idGlCategorie, amount, note, created_at)
+    (idGlTransaction, idAccount, idAccountTo,idGlCategorie, amount, note, created_at)
   VALUES
-    (p_idGlTransaction, p_idAccount, p_idGlCategorie, p_amount, p_note, NOW());
+    (p_idGlTransaction, p_idAccount,p_idAccountTo, p_idGlCategorie, p_amount, p_note, NOW());
 
 END $$
 
 -- ---------- READ (BY ID) ----------
-DROP PROCEDURE IF EXISTS sp_gl_transaction_lines_get_by_id $$
-CREATE PROCEDURE sp_gl_transaction_lines_get_by_id(
+DROP PROCEDURE IF EXISTS sp_gl_transaction_lines_get_by_transaction_id $$
+CREATE PROCEDURE sp_gl_transaction_lines_get_by_transaction_id(
   IN p_idGlTransactionLine INT
 )
 BEGIN
- SELECT gtl.idGlTransactionLine, ac.name AS account_name , glc.name AS category_name , glc.nature, gtl.amount, gtl.created_at
+ SELECT gtl.idGlTransactionLine, ac.name AS account_name , glc.name AS category_name , glc.nature, gtl.amount, gtl.created_at,  gtl.idAccount AS idAccount, gtl.idAccountTo AS idAccountTo
 FROM gl_transaction_lines gtl
 JOIN accounts ac ON ac.idAccount = gtl.idAccount
 JOIN gl_categories glc ON glc.idGlCategorie = gtl.idGlCategorie

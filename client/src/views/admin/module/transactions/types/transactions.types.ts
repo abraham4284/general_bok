@@ -1,8 +1,8 @@
 export type GlTransactions = {
-  idGltransaction: number;
+  idGlTransaction: number;
   occurred_at: string;
   description: string;
-  status: "POSTED" | "VOID";
+  status: "POSTED" | "VOID" | "OK" | "ANULADO";
   source: "MANUAL" | "SYSTEM" | "IMPORT";
   external_ref: string;
   created_at: string;

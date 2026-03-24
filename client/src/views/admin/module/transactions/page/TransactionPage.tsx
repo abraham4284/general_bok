@@ -22,21 +22,22 @@ export const TransactionPage = () => {
     loading,
     resetGlTransactions,
     transactions,
+    cancelTransaction,
   } = useGltransactions();
 
   const {
     accounts,
     getAccounts,
-    error: errorAccount,
-    loading: loadingAccount,
+    // error: errorAccount,
+    // loading: loadingAccount,
     resetAccounts,
   } = useAccount();
 
   const {
     category,
     getCategory,
-    error: errorCategory,
-    loading: loadingCategory,
+    // error: errorCategory,
+    // loading: loadingCategory,
     resetCategories,
   } = useCategory();
 
@@ -49,20 +50,6 @@ export const TransactionPage = () => {
     setIsOpen,
     // toggleModalAndSetDataEdit,
   } = useUtilsState();
-  // const [categoryFilter, setCategoryFilter] = useState<Category[]>([]);
-
-  // const handleFilterInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   e.preventDefault();
-  //   const searchInput = e.target.value.toLocaleLowerCase();
-  //   if (searchInput === "") {
-  //     setCategoryFilter([]);
-  //   } else {
-  //     const filterCategory = category.filter((el) => {
-  //       return el.name.toLocaleLowerCase().includes(searchInput);
-  //     });
-  //     setCategoryFilter(filterCategory);
-  //   }
-  // };
 
   const handleCreate = () => {
     addDataEdit(null);
@@ -123,6 +110,7 @@ export const TransactionPage = () => {
               // deleteAccount={deleteAccount}
               addDataEdit={addDataEdit}
               toggleModal={toggleModal}
+              cancelTransaction={cancelTransaction}
             />
           </div>
         </CardContent>

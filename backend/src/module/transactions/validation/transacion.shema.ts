@@ -13,3 +13,7 @@ export const createTransactionLineSchema = z.object({
   amount: z.coerce.number().positive(),
   direction: z.enum(["INCREMENT", "DECREMENT"]).optional(),
 });
+
+export const transacionIdTransactions = z.object({
+  id: z.coerce.number().int().positive(),
+});

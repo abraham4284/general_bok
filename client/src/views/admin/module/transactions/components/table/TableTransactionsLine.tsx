@@ -43,7 +43,6 @@ export const TableTransactionsLine = ({
           <TableHead>Categoria</TableHead>
           <TableHead>Naturaleza</TableHead>
           <TableHead>Monto</TableHead>
-          <TableHead>Acciones</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -64,29 +63,7 @@ export const TableTransactionsLine = ({
                 {formatCurrency(el.amount)}
               </TableCell>
 
-              {/* <TableCell className="font-medium">{el.created_at}</TableCell> */}
-              <TableCell>
-                <div className="flex gap-2">
-                  {/* <Link
-                    className="bg-blue-500 cursor-pointer px-1.5 py-1.5 rounded-lg"
-                    to={`/admin/transaction/${el.idGlTransaction}`}
-                  >
-                    <FolderKanban color="white" strokeWidth={2.5} />
-                  </Link> */}
-
-                  <Button
-                    className="bg-red-600 cursor-pointer"
-                    title="Anular"
-                    // onClick={async () => await deleteAccount(el.idAccount)}
-                  >
-                    {loading ? (
-                      <Spinner />
-                    ) : (
-                      <CircleSlash color="white" strokeWidth={2.5} />
-                    )}
-                  </Button>
-                </div>
-              </TableCell>
+             
             </TableRow>
           ))
         ) : (

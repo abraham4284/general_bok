@@ -1,6 +1,7 @@
 import { pool } from "@/db/db.js";
 import type { GlTransaction } from "../types/transaction.types.js";
 
+
 export async function getTransactionsServices(): Promise<GlTransaction[] | undefined> {
   const conn = await pool.getConnection();
   try {

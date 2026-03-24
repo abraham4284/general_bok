@@ -15,21 +15,19 @@ export const TransactionLineByIdPage = () => {
     transactionsById,
     setLoadingTransactionsById,
     resetGlTransactionsLineById,
-    resetGlTransactionsById
+    resetGlTransactionsById,
   } = useGltransactions();
-
 
   useEffect(() => {
     if (id) {
       getTransactionsLineById(parseInt(id));
-      getTransactionsById(parseInt(id))
+      getTransactionsById(parseInt(id));
       return () => {
         resetGlTransactionsLineById();
-        resetGlTransactionsById()
+        resetGlTransactionsById();
       };
     }
   }, [id]);
-
 
 
 
@@ -43,14 +41,12 @@ export const TransactionLineByIdPage = () => {
           <h2 className="text-lg font-semibold">Transaccion n</h2>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-6 gap-2 md:gap-3">
-          <CardResumeTransaction
-            loadingById={false}
-            transactionById={transactionsById}
-          />
-        </div>
+        <CardResumeTransaction
+          loadingById={false}
+          transactionById={transactionsById}
+        />
       </div>
-      <Card>
+      <Card className="mt-4">
         <CardHeader>
           <CardTitle>Transacciones en linea</CardTitle>
         </CardHeader>
@@ -59,8 +55,8 @@ export const TransactionLineByIdPage = () => {
             <TableTransactionsLine
               loading={loadingTransactionsLineById}
               data={transactionsLineById}
-            //   addDataEdit={addDataEdit}
-            //   toggleModal={toggleModal}
+              //   addDataEdit={addDataEdit}
+              //   toggleModal={toggleModal}
             />
           </div>
         </CardContent>

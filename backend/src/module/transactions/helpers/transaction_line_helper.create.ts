@@ -39,12 +39,13 @@ export async function createTransactionLineHelper(
 
     if (nature === "TRANSFER") {
       const [resultTransferAccountFrom] = await conn.query(
-        "CALL sp_gl_transaction_lines_create(?,?,?,?,?)",
+        "CALL sp_gl_transaction_lines_create(?,?,?,?,?,?)",
         [
           dto.idGlTransaction,
           dto.idAccount,
+          dto.idAccountTo,
           dto.idGlCategorie,
-          amountDecimal.negated().toString(),
+          amountDecimal.toString(),
           dto.note,
         ],
       );
@@ -56,24 +57,25 @@ export async function createTransactionLineHelper(
         };
       }
 
-      const [resultTransferAccountTo] = await conn.query(
-        "CALL sp_gl_transaction_lines_create(?,?,?,?,?)",
-        [
-          dto.idGlTransaction,
-          dto.idAccountTo,
-          dto.idGlCategorie,
-          amountDecimal.toString(),
-          dto.note,
-        ],
-      );
-      if (resultTransferAccountTo.affectedRows === 0) {
-        return {
-          status: "error",
-          success: false,
-          message:
-            "Error al crear la línea de transacción para la cuenta destino",
-        };
-      }
+      // const [resultTransferAccountTo] = await conn.query(
+      //   "CALL sp_gl_transaction_lines_create(?,?,?,?,?,?)",
+      //   [
+      //     dto.idGlTransaction,
+      //     dto.idAccount,
+      //     dto.idAccountTo,
+      //     dto.idGlCategorie,
+      //     amountDecimal.toString(),
+      //     dto.note,
+      //   ],
+      // );
+      // if (resultTransferAccountTo.affectedRows === 0) {
+      //   return {
+      //     status: "error",
+      //     success: false,
+      //     message:
+      //       "Error al crear la línea de transacción para la cuenta destino",
+      //   };
+      // }
       const { status, message } = await updateBalanceHelper(
         {
           idAccountFrom: dto.idAccount,
@@ -98,10 +100,11 @@ export async function createTransactionLineHelper(
       };
     } else {
       const [result] = await conn.query(
-        "CALL sp_gl_transaction_lines_create(?,?,?,?,?)",
+        "CALL sp_gl_transaction_lines_create(?,?,?,?,?,?)",
         [
           dto.idGlTransaction,
           dto.idAccount,
+          null,
           dto.idGlCategorie,
           signedAmount,
           dto.note,

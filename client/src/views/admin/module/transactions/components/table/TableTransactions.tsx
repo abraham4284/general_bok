@@ -7,12 +7,19 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { BadgeCheck, CircleSlash,FolderKanban } from "lucide-react";
+import { BadgeCheck, CircleSlash, FolderKanban } from "lucide-react";
 import { Spinner } from "@/components/ui/spinner";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
+import type { GlTransactions } from "../../types/transactions.types";
+
 // import { formatCurrency } from "@/helpers";
+type ActionResult<T = undefined> = {
+  success: boolean;
+  message: string;
+  data?: T;
+};
 
 type TableAccountProps = {
   loading: boolean;
@@ -20,6 +27,7 @@ type TableAccountProps = {
   deleteAccount?: (id: number) => Promise<void>;
   addDataEdit: (data: any) => void;
   toggleModal: () => void;
+  cancelTransaction: (id: number) => Promise<ActionResult<GlTransactions[]>>;
 };
 
 export const TableTransactions = ({
@@ -28,8 +36,8 @@ export const TableTransactions = ({
   // deleteAccount,
   // addDataEdit,
   // toggleModal,
+  cancelTransaction,
 }: TableAccountProps) => {
-  console.log(data, "lo que llega");
   return (
     <Table>
       <TableCaption>Lista de transacciones</TableCaption>
@@ -59,7 +67,7 @@ export const TableTransactions = ({
 
               <TableCell className="font-medium">{el.source}</TableCell>
               <TableCell className="font-medium">
-                {el.external_ref ? el.external_ref: "-"}
+                {el.external_ref ? el.external_ref : "-"}
               </TableCell>
               <TableCell className="font-medium">
                 {el.status === "OK" && (
@@ -86,17 +94,23 @@ export const TableTransactions = ({
                     <FolderKanban color="white" strokeWidth={2.5} />
                   </Link>
 
-                  <Button
-                    className="bg-red-600 cursor-pointer"
-                    title="Anular"
-                    // onClick={async () => await deleteAccount(el.idAccount)}
-                  >
-                    {loading ? (
-                      <Spinner />
-                    ) : (
-                      <CircleSlash color="white" strokeWidth={2.5} />
-                    )}
-                  </Button>
+                  {el.status === "ANULADO" ? (
+                    ""
+                  ) : (
+                    <Button
+                      className="bg-red-600 cursor-pointer"
+                      title="Anular"
+                      onClick={async () =>
+                        await cancelTransaction(el.idGlTransaction)
+                      }
+                    >
+                      {loading ? (
+                        <Spinner />
+                      ) : (
+                        <CircleSlash color="white" strokeWidth={2.5} />
+                      )}
+                    </Button>
+                  )}
                 </div>
               </TableCell>
             </TableRow>

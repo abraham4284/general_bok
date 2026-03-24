@@ -5,7 +5,7 @@ export async function getTransactionsLineServices(id:number): Promise<GlTransact
   const conn = await pool.getConnection();
   try {
     const [result] = await pool.query<any[]>(
-      "CALL sp_gl_transaction_lines_get_by_id(?)",[id]
+      "CALL sp_gl_transaction_lines_get_by_transaction_id(?)",[id]
     );
     const rows = result?.[0] ?? [];
     return rows;
