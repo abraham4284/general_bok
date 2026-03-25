@@ -3,7 +3,7 @@ export type Account = {
   name: string;
   type: "CASH" | "BANK" | "WALLET" | "OTHER";
   currency: string;
-  balance: number;
+  balance: number | string;
   is_active: boolean;
   create_at: string;
 };

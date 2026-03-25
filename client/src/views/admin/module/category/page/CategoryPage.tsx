@@ -5,10 +5,11 @@ import { useCategory } from "../hooks/useCategory.method";
 import { useUtilsState } from "@/hooks/useUtilsState";
 import {
   CardFilterCategory,
+  CardMetricCategoryTransaction,
   ModalFormCategory,
   TableCategory,
 } from "../components";
-import type { Category } from "../types/category.types"
+import type { Category } from "../types/category.types";
 
 export const CategoryPage = () => {
   const {
@@ -76,6 +77,7 @@ export const CategoryPage = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 md:gap-4">
         {/* <CardMetricAccount metric={metric} loading ={loading} /> */}
       </div>
+      <CardMetricCategoryTransaction loading={loading} category={category} />
 
       {/* Filtros y búsqueda */}
       <div>

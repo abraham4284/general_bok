@@ -1,0 +1,1 @@
+export { default } from "@module/truncate_tables/routes/transactions.routes.truncate.js"

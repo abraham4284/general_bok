@@ -8,7 +8,7 @@ export function setAuthCookies(res: Response, accessToken: string, refreshToken:
     httpOnly: true,
     secure: true,                // ✅ FORZAR
     sameSite: "none",            // ✅ FORZAR
-    maxAge: 15 * 60 * 1000,
+    maxAge: 3 * 60 * 60 * 1000,
     path: "/",
   });
 

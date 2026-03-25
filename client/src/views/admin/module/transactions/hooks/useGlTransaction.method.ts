@@ -169,7 +169,7 @@ export const useGltransactions = () => {
           const updateTransaction = data.data[0];
           setTransactions((prev) =>
             prev.map((el) =>
-              el.idGlTransaction === id ? updateTransaction : el,
+              el.idGltransaction === id ? updateTransaction : el,
             ),
           );
           setError(null);

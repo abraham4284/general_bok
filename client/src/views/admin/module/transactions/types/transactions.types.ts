@@ -1,11 +1,14 @@
 export type GlTransactions = {
-  idGlTransaction: number;
+  idGltransaction: number;
   occurred_at: string;
   description: string;
   status: "POSTED" | "VOID" | "OK" | "ANULADO";
   source: "MANUAL" | "SYSTEM" | "IMPORT";
   external_ref: string;
   created_at: string;
+  amount: number;
+  category_name: string;
+  nature: string;
 };
 
 export type GlTransactionsCreate = {

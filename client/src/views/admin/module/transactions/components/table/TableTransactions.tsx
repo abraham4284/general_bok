@@ -38,12 +38,15 @@ export const TableTransactions = ({
   // toggleModal,
   cancelTransaction,
 }: TableAccountProps) => {
+  console.log(data,'data')
   return (
     <Table>
       <TableCaption>Lista de transacciones</TableCaption>
       <TableHeader>
         <TableRow>
           <TableHead className="">Fecha</TableHead>
+          <TableHead>Categoria</TableHead>
+          <TableHead>Naturaleza</TableHead>
           <TableHead>Descripcion</TableHead>
           <TableHead>Fuente</TableHead>
           <TableHead>Referencia externa</TableHead>
@@ -63,6 +66,8 @@ export const TableTransactions = ({
           data.map((el) => (
             <TableRow key={el.idGlTransaction}>
               <TableCell className="font-medium">{el.occurred_at}</TableCell>
+              <TableCell className="font-medium">{el.category_name}</TableCell>
+              <TableCell className="font-medium">{el.nature}</TableCell>
               <TableCell className="font-medium">{el.description}</TableCell>
 
               <TableCell className="font-medium">{el.source}</TableCell>
@@ -89,7 +94,7 @@ export const TableTransactions = ({
                 <div className="flex gap-2">
                   <Link
                     className="bg-blue-500 cursor-pointer px-1.5 py-1.5 rounded-lg"
-                    to={`/admin/transaction/${el.idGlTransaction}`}
+                    to={`/admin/transaction/${el.idGltransaction}`}
                   >
                     <FolderKanban color="white" strokeWidth={2.5} />
                   </Link>
@@ -101,7 +106,7 @@ export const TableTransactions = ({
                       className="bg-red-600 cursor-pointer"
                       title="Anular"
                       onClick={async () =>
-                        await cancelTransaction(el.idGlTransaction)
+                        await cancelTransaction(el.idGltransaction)
                       }
                     >
                       {loading ? (

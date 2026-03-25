@@ -4,7 +4,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
-import { authRoutes,accountRoutes,glCategoriesRoutes,transactionsRoutes,transactionsLineRoutes } from "@module/index.js";
+import { authRoutes,accountRoutes,glCategoriesRoutes,transactionsRoutes,transactionsLineRoutes,transactionsTruncate } from "@module/index.js";
 
 dotenv.config();
 
@@ -51,5 +51,6 @@ app.use("/api", accountRoutes);
 app.use("/api", glCategoriesRoutes);
 app.use("/api", transactionsRoutes);
 app.use("/api", transactionsLineRoutes);
+app.use("/api", transactionsTruncate);
 
 export default app;

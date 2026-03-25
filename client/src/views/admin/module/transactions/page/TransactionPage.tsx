@@ -4,7 +4,7 @@ import { HeaderAll } from "@/views/admin/components/HeaderAll";
 // import { useCategory } from "../hooks/useCategory.method";
 import { useUtilsState } from "@/hooks/useUtilsState";
 import { useGltransactions } from "../hooks/useGlTransaction.method";
-import { ModalFormTransaction, TableTransactions } from "../components";
+import { CardMetricTransactions, ModalFormTransaction, TableTransactions } from "../components";
 import { useAccount } from "../../account/hooks/useAccount.method";
 import { useCategory } from "../../category/hooks/useCategory.method";
 // import {
@@ -74,7 +74,7 @@ export const TransactionPage = () => {
   }, [isOpen]);
 
   // const categoryDef = categoryFilter.length === 0 ? category : categoryFilter;
-
+  console.log(transactions,'soy transactions')
   return (
     <section className="space-y-4 md:space-y-6 p-4 md:p-6">
       {/* Header */}
@@ -88,8 +88,8 @@ export const TransactionPage = () => {
       </div>
 
       {/* Estadísticas */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 md:gap-4">
-        {/* <CardMetricAccount metric={metric} loading ={loading} /> */}
+      <div className="space-y-4">
+        <CardMetricTransactions loading ={loading} transactions={transactions} />
       </div>
 
       {/* Filtros y búsqueda */}

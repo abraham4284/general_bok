@@ -7,6 +7,7 @@ import {
   ModalFormAccount,
   TableAccount,
   CardFilterAccount,
+  CardMetricAccount,
 } from "../components";
 import type { Account } from "../types/account.types";
 import { useAuthStore } from "../../auth";
@@ -34,7 +35,6 @@ export const AccountPage = () => {
   } = useUtilsState();
   const [accountFilter, setAccountFilter] = useState<Account[]>([]);
 
-
   const handleFilterInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     const searchInput = e.target.value.toLocaleLowerCase();
@@ -60,8 +60,6 @@ export const AccountPage = () => {
     };
   }, []);
 
-
-
   const acountDef = accountFilter.length === 0 ? accounts : accountFilter;
 
   return (
@@ -80,7 +78,7 @@ export const AccountPage = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 md:gap-4">
         {/* <CardMetricAccount metric={metric} loading ={loading} /> */}
       </div>
-
+      <CardMetricAccount loading={loading} accounts={accounts} />
       {/* Filtros y búsqueda */}
       <div>
         <CardFilterAccount handleFilterInput={handleFilterInput} />
@@ -113,7 +111,7 @@ export const AccountPage = () => {
         createAccount={createAccount}
         updateAccount={updateAccount}
         closeModal={closeModal}
-        addDataEdit = {addDataEdit}
+        addDataEdit={addDataEdit}
       />
     </section>
   );

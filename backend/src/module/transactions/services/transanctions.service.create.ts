@@ -36,22 +36,23 @@ export async function createTransactionService(
         data: [],
       };
     }
-
+    console.log("Ingreso a la funcion y valido")
     const [idRows] = await conn.query<OutIdRow[]>(
       "SELECT @idGlTransaction AS idGlTransaction",
     );
 
     const idGlTransaction = idRows[0]?.idGlTransaction;
+    console.log(idGlTransaction,'idGltransaction')
     if (!idGlTransaction) throw new Error("Could not get idGlTransaction");
 
     const [rows] = await conn.query<any[]>(
-      "CALL sp_gl_transactions_get_by_id(?)",
+      "CALL sp_gl_transactions_get_by_id_unique(?)",
       [idGlTransaction],
     );
-
+    
+    console.log(rows,'soy rows')
     const created = rows?.[0]?.[0];
-    if (!created) throw new Error("Transaction created but not fetched");
-
+    if (!created) throw new Error("Error al crear la transactions");
     // Creamos las transacciones en linea
 
     const { status, message } = await createTransactionLineHelper(

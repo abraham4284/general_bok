@@ -34,21 +34,24 @@ BEGIN
 END $$
 
 -- ---------- READ (BY ID) ----------
+
+DROP PROCEDURE IF EXISTS sp_gl_transactions_get_by_id_unique $$
+CREATE PROCEDURE sp_gl_transactions_get_by_id_unique(
+  IN p_idGlTransaction INT
+)
+BEGIN
+ SELECT * FROM gl_transactions WHERE idGltransaction = p_idGlTransaction;
+END $$
+
 DROP PROCEDURE IF EXISTS sp_gl_transactions_get_by_id $$
 CREATE PROCEDURE sp_gl_transactions_get_by_id(
   IN p_idGlTransaction INT
 )
 BEGIN
-  SELECT
-    idGlTransaction,
-    occurred_at,
-    description,
-    status,
-    source,
-    external_ref,
-    created_at
-  FROM gl_transactions
-  WHERE idGlTransaction = p_idGlTransaction;
+  SELECT gt.* ,gl.amount, glc.name AS category_name, glc.nature FROM gl_transactions gt
+JOIN gl_transaction_lines gl ON gl.idGltransaction = gt.idGltransaction
+JOIN gl_categories glc ON glc.idGlCategorie = gl.idGlCategorie
+WHERE gt.idGltransaction = p_idGlTransaction;
 END $$
 
 -- ---------- LIST ----------
@@ -80,15 +83,9 @@ END $$
 DROP PROCEDURE IF EXISTS sp_gl_transactions_getAll $$
 CREATE PROCEDURE sp_gl_transactions_getAll( )
 BEGIN
-  SELECT
-    idGlTransaction,
-    occurred_at,
-    description,
-    status,
-    source,
-    external_ref,
-    created_at
-  FROM gl_transactions;
+  SELECT gt.* ,gl.amount, glc.name AS category_name, glc.nature FROM gl_transactions gt
+JOIN gl_transaction_lines gl ON gl.idGltransaction = gt.idGltransaction
+JOIN gl_categories glc ON glc.idGlCategorie = gl.idGlCategorie;
 END $$
 
 

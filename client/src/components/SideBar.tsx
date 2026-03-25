@@ -119,7 +119,7 @@ export const SideBar = ({ isOpenSideBar, setIsOpenSideBar }: SideBarProps) => {
                 className="ml-2 px-2 py-1 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 flex flex-col items-center gap-1"
                 onClick={async () => {
                   await logout();
-                  navigate("/login");
+                  navigate("/");
                 }}
               >
                 <span className="text-[10px] leading-none text-gray-500">
