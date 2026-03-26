@@ -11,6 +11,7 @@ import {
 } from "../components";
 import type { Account } from "../types/account.types";
 import { useAuthStore } from "../../auth";
+import { Meta } from "@/components";
 
 export const AccountPage = () => {
   const {
@@ -63,56 +64,59 @@ export const AccountPage = () => {
   const acountDef = accountFilter.length === 0 ? accounts : accountFilter;
 
   return (
-    <section className="space-y-4 md:space-y-6 p-4 md:p-6">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <HeaderAll
-          title={"Gestión de cuentas"}
-          subTitle={"Gestiona el control de tus cuentas"}
-          handleCreate={handleCreate}
-          btnInfo="Nueva Cuenta"
+    <>
+      <Meta title="Cuentas" description="Gestiona tus cuentas" />
+      <section className="space-y-4 md:space-y-6 p-4 md:p-6">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <HeaderAll
+            title={"Gestión de cuentas"}
+            subTitle={"Gestiona el control de tus cuentas"}
+            handleCreate={handleCreate}
+            btnInfo="Nueva Cuenta"
+          />
+        </div>
+
+        {/* Estadísticas */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 md:gap-4">
+          {/* <CardMetricAccount metric={metric} loading ={loading} /> */}
+        </div>
+        <CardMetricAccount loading={loading} accounts={accounts} />
+        {/* Filtros y búsqueda */}
+        <div>
+          <CardFilterAccount handleFilterInput={handleFilterInput} />
+        </div>
+
+        {/* Tabla de categorías */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Account</CardTitle>
+          </CardHeader>
+          <CardContent className="p-0 md:p-6">
+            <div className="overflow-x-auto">
+              <TableAccount
+                loading={loading}
+                data={acountDef}
+                // deleteAccount={deleteAccount}
+                addDataEdit={addDataEdit}
+                toggleModal={toggleModal}
+              />
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Modal para crear/editar */}
+        <ModalFormAccount
+          openModal={isOpen}
+          loading={loading}
+          dataEdit={dataEdit}
+          setOpenModal={setIsOpen}
+          createAccount={createAccount}
+          updateAccount={updateAccount}
+          closeModal={closeModal}
+          addDataEdit={addDataEdit}
         />
-      </div>
-
-      {/* Estadísticas */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 md:gap-4">
-        {/* <CardMetricAccount metric={metric} loading ={loading} /> */}
-      </div>
-      <CardMetricAccount loading={loading} accounts={accounts} />
-      {/* Filtros y búsqueda */}
-      <div>
-        <CardFilterAccount handleFilterInput={handleFilterInput} />
-      </div>
-
-      {/* Tabla de categorías */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Account</CardTitle>
-        </CardHeader>
-        <CardContent className="p-0 md:p-6">
-          <div className="overflow-x-auto">
-            <TableAccount
-              loading={loading}
-              data={acountDef}
-              // deleteAccount={deleteAccount}
-              addDataEdit={addDataEdit}
-              toggleModal={toggleModal}
-            />
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Modal para crear/editar */}
-      <ModalFormAccount
-        openModal={isOpen}
-        loading={loading}
-        dataEdit={dataEdit}
-        setOpenModal={setIsOpen}
-        createAccount={createAccount}
-        updateAccount={updateAccount}
-        closeModal={closeModal}
-        addDataEdit={addDataEdit}
-      />
-    </section>
+      </section>
+    </>
   );
 };

@@ -186,7 +186,6 @@ export const ModalFormTransaction = ({
               name="description"
               value={description}
               onChange={onInputChange}
-              required
               disabled={loading}
             />
           </div>
@@ -196,7 +195,6 @@ export const ModalFormTransaction = ({
               name="external_ref"
               value={external_ref}
               onChange={onInputChange}
-              required
               disabled={loading}
             />
           </div>

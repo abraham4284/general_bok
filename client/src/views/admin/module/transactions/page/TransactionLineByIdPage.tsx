@@ -3,6 +3,7 @@ import { useGltransactions } from "../hooks/useGlTransaction.method";
 import { useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CardResumeTransaction, TableTransactionsLine } from "../components";
+import { Meta } from "@/components";
 
 export const TransactionLineByIdPage = () => {
   const { id } = useParams();
@@ -29,38 +30,39 @@ export const TransactionLineByIdPage = () => {
     }
   }, [id]);
 
-
-
   return (
-    <section>
-      {/* <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <>
+      <Meta title="Detalle de transacción" description="Gestiona categorias" />
+      <section>
+        {/* <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
 
       </div> */}
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold">Transaccion n</h2>
-        </div>
-
-        <CardResumeTransaction
-          loadingById={false}
-          transactionById={transactionsById}
-        />
-      </div>
-      <Card className="mt-4">
-        <CardHeader>
-          <CardTitle>Transacciones en linea</CardTitle>
-        </CardHeader>
-        <CardContent className="p-0 md:p-6">
-          <div className="overflow-x-auto">
-            <TableTransactionsLine
-              loading={loadingTransactionsLineById}
-              data={transactionsLineById}
-              //   addDataEdit={addDataEdit}
-              //   toggleModal={toggleModal}
-            />
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg font-semibold">Transaccion n</h2>
           </div>
-        </CardContent>
-      </Card>
-    </section>
+
+          <CardResumeTransaction
+            loadingById={false}
+            transactionById={transactionsById}
+          />
+        </div>
+        <Card className="mt-4">
+          <CardHeader>
+            <CardTitle>Transacciones en linea</CardTitle>
+          </CardHeader>
+          <CardContent className="p-0 md:p-6">
+            <div className="overflow-x-auto">
+              <TableTransactionsLine
+                loading={loadingTransactionsLineById}
+                data={transactionsLineById}
+                //   addDataEdit={addDataEdit}
+                //   toggleModal={toggleModal}
+              />
+            </div>
+          </CardContent>
+        </Card>
+      </section>
+    </>
   );
 };

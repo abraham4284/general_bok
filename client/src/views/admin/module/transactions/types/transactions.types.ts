@@ -9,6 +9,7 @@ export type GlTransactions = {
   amount: number;
   category_name: string;
   nature: string;
+  idGlCategorie: number
 };
 
 export type GlTransactionsCreate = {
@@ -28,4 +29,13 @@ export type GlTransactionsLine = {
   nature: string;
   amount: number;
   created_at: string;
+};
+
+
+export type TransactionFilterState = {
+  date: string;
+  fromDate: string;
+  toDate: string;
+  categoryId: string;
+  nature: "" | "INCOME" | "EXPENSE" | "ADJUSTMENT" | "TRANSFER" | "OTHER";
 };
