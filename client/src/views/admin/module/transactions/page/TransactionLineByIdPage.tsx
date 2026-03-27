@@ -14,7 +14,7 @@ export const TransactionLineByIdPage = () => {
     // errorTransactionsLineById,
     getTransactionsById,
     transactionsById,
-    setLoadingTransactionsById,
+    // setLoadingTransactionsById,
     resetGlTransactionsLineById,
     resetGlTransactionsById,
   } = useGltransactions();

@@ -57,7 +57,6 @@ export const ModalFormAccount = ({
   loading,
   setOpenModal,
   createAccount,
-  updateAccount,
   closeModal,
   addDataEdit,
 }: ModalFormAccountProps) => {

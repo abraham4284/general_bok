@@ -280,6 +280,7 @@ export const useGltransactions = () => {
     transactionsById,
     loading,
     loadingTransactionsLineById,
+    loadingTransactionsById,
     setLoadingTransactionsById,
     error,
     errorTransactionsLineById,

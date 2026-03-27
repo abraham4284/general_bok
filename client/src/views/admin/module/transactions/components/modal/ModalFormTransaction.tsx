@@ -1,4 +1,4 @@
-import { useEffect, type FormEvent } from "react";
+import {  type FormEvent } from "react";
 import {
   Dialog,
   DialogContent,
@@ -19,10 +19,8 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Spinner } from "@/components/ui/spinner";
 import { useForm } from "@/hooks";
 import { NumericFormat } from "react-number-format";
-import { Decimal } from "decimal.js";
 import { toast, Toaster } from "react-hot-toast";
 import type { Account } from "@/views/admin/module/account/types/account.types";
 import type { Category } from "@/views/admin/module/category/types/category.types";
@@ -249,7 +247,7 @@ export const ModalFormTransaction = ({
                     accounts.map((el) => (
                       <SelectGroup key={el.idAccount}>
                         <SelectItem value={String(el.idAccount)}>
-                          {el.name} - {formatCurrency(el.balance)}
+                          {el.name} - {formatCurrency(Number(el.balance))}
                         </SelectItem>
                       </SelectGroup>
                     ))
@@ -283,7 +281,7 @@ export const ModalFormTransaction = ({
                     accounts.map((el) => (
                       <SelectGroup key={el.idAccount}>
                         <SelectItem value={String(el.idAccount)}>
-                          {el.name} - {formatCurrency(el.balance)}
+                          {el.name} - {formatCurrency(Number(el.balance))}
                         </SelectItem>
                       </SelectGroup>
                     ))
@@ -341,7 +339,7 @@ export const ModalFormTransaction = ({
                       accounts.map((el) => (
                         <SelectGroup key={el.idAccount}>
                           <SelectItem value={String(el.idAccount)}>
-                            {el.name} - {formatCurrency(el.balance)}
+                            {el.name} - {formatCurrency(Number(el.balance))}
                           </SelectItem>
                         </SelectGroup>
                       ))
@@ -372,7 +370,7 @@ export const ModalFormTransaction = ({
                       accounts.map((el) => (
                         <SelectGroup key={el.idAccount}>
                           <SelectItem value={String(el.idAccount)}>
-                            {el.name} - {formatCurrency(el.balance)}
+                            {el.name} - {formatCurrency(Number(el.balance))}
                           </SelectItem>
                         </SelectGroup>
                       ))

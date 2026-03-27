@@ -3,7 +3,6 @@ import { CheckCircle2, Wallet, XCircle } from "lucide-react";
 import { Spinner } from "@/components/ui/spinner";
 import type { Account } from "../../types/account.types";
 import { formatCurrency } from "@/helpers";
-import { Decimal } from "decimal.js"
 
 type CardMetricAccountProps = {
   loading: boolean;

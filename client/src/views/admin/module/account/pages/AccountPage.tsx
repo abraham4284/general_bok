@@ -10,7 +10,6 @@ import {
   CardMetricAccount,
 } from "../components";
 import type { Account } from "../types/account.types";
-import { useAuthStore } from "../../auth";
 import { Meta } from "@/components";
 
 export const AccountPage = () => {

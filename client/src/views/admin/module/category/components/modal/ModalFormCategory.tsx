@@ -21,10 +21,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { useForm } from "@/hooks";
-import { NumericFormat } from "react-number-format";
-import { Decimal } from "decimal.js";
 import { toast, Toaster } from "react-hot-toast";
-import { currencies, typesOptions } from "@/views/admin/module/account/data";
 import { natureTypes } from "../../data/nature";
 
 const initialForm = {
